@@ -34,11 +34,13 @@ OBJS = \
 
 LIB = $(LIB_DIR)/libsunspec.a
 
-CFLAGS += $(INCLUDES) $(DEBUG_CFLAGS)
+CFLAGS += $(INCLUDES) -fPIC
 
 all: lib
 
 lib: $(OBJS)
+	mkdir -p $(LIB_DIR)
+	$(CC) $(LDFLAGS) -shared -fPIC -Wl,-soname,libsunspec.so.0 -o "$(LIB_DIR)/libsunspec.so.0.0.0" $(OBJS)
 	$(AR) rcs $(LIB) $(OBJS)
 	$(RM) $(OBJS)
 
@@ -49,6 +51,12 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 install: all
+	mkdir -p $(DESTDIR)/usr/lib
+	install -m 755 $(LIB_DIR)/libsunspec.a $(LIB_DIR)/libsunspec.so.0.0.0 $(DESTDIR)/usr/lib
+	ln -sf libsunspec.so.0.0.0 $(DESTDIR)/usr/lib/libsunspec.so.0
+	ln -sf libsunspec.so.0.0.0 $(DESTDIR)/usr/lib/libsunspec.so
+	mkdir -p $(DESTDIR)/usr/include/libsunspec
+	cp $(INCLUDE_DIR)/* $(DESTDIR)/usr/include/libsunspec
 
 clean:
 	$(RM) $(OBJS) $(LIB) *~
