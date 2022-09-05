@@ -89,6 +89,11 @@ suns_data_t suns_data_types[] = {
     {"ipaddr", SUNS_TYPE_IPADDR, SUNS_TYPE_UINT32, 2, 0, {.u32 = 0}, suns_value_uint32_to_float, suns_value_float_to_uint32, suns_value_uint32_str, suns_value_ipaddr_impl,
               suns_modbus_to_uint32, suns_modbus_from_uint32},
     {"ipv6addr", SUNS_TYPE_IPV6ADDR, SUNS_TYPE_STR, 8, 0, {.u16 = 0}, NULL, NULL, suns_value_uint16_str, suns_value_ipv6addr_impl, suns_modbus_to_str, suns_modbus_from_str},
+    {"eui48", SUNS_TYPE_EUI48, SUNS_TYPE_STR, 4, 0, {.u16 = 0},
+              NULL, NULL, suns_value_str_str, suns_value_string_impl, suns_modbus_to_str, suns_modbus_from_str},
+    {"count", SUNS_TYPE_COUNT, SUNS_TYPE_UINT16, 1, 0, {.u16 = 0xFFFF},
+              suns_value_uint16_to_float, suns_value_float_to_uint16, suns_value_uint16_str, suns_value_uint16_impl,
+              suns_modbus_to_uint16, suns_modbus_from_uint16},
     {NULL},
 };
 
@@ -707,7 +712,7 @@ suns_point_add(suns_block_t *block, suns_point_def_t *point_def, uint16_t block_
         return SUNS_ERR_ALLOC;
     }
 
-    if ((point_def->type->type == SUNS_TYPE_STR) || (point_def->type->type == SUNS_TYPE_IPV6ADDR)) {
+    if ((point_def->type->type == SUNS_TYPE_STR) || (point_def->type->type == SUNS_TYPE_IPV6ADDR) || (point_def->type->type == SUNS_TYPE_EUI48)) {
         if ((point->value_ptr = calloc(1, point_def->len * 2)) == NULL) {
             err = SUNS_ERR_ALLOC;
             goto error_exit;
@@ -763,6 +768,7 @@ suns_point_value_equals(suns_point_t *p1, suns_point_t *p2)
         case SUNS_TYPE_SUNSSF:
         case SUNS_TYPE_BIT16:
         case SUNS_TYPE_PAD:
+        case SUNS_TYPE_COUNT:
             return (p1->value_base.u16 == p2->value_base.u16);
         case SUNS_TYPE_INT32:
         case SUNS_TYPE_UINT32:
@@ -778,6 +784,7 @@ suns_point_value_equals(suns_point_t *p1, suns_point_t *p2)
             return (p1->value_base.u64 == p2->value_base.u64);
         case SUNS_TYPE_STR:
         case SUNS_TYPE_IPV6ADDR:
+        case SUNS_TYPE_EUI48:
             if (p1->point_def->len != p2->point_def->len) {
                 return 0;
             }

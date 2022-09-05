@@ -71,6 +71,8 @@
 #define SUNS_TYPE_IPADDR                17
 #define SUNS_TYPE_IPV6ADDR              18
 #define SUNS_TYPE_STR                   19
+#define SUNS_TYPE_EUI48                 20
+#define SUNS_TYPE_COUNT                 21
 
 typedef struct _suns_data_t {
     char *id;
