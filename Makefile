@@ -34,6 +34,9 @@ OBJS = \
 
 LIB = $(LIB_DIR)/libsunspec.a
 
+SUNS_SMDX_PATH?=/usr/share/sunspec/smdx/
+CFLAGS += -DSUNS_SMDX_PATH=\"${SUNS_SMDX_PATH}\"
+
 CFLAGS += $(INCLUDES) -fPIC
 
 all: lib
