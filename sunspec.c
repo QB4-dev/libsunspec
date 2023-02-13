@@ -32,7 +32,7 @@
 #include "sunspec_log.h"
 
 #define SUNS_BASE_ADDR_LIST_LEN         3
-uint16_t suns_base_addr_list[SUNS_BASE_ADDR_LIST_LEN] = {40000, 0, 50000};
+uint16_t suns_base_addr_list[SUNS_BASE_ADDR_LIST_LEN] = {0,40000,50000};
 
 #define SUNS_DEVICE_MAGIC_LEN           4
 unsigned char suns_device_magic[SUNS_DEVICE_MAGIC_LEN] = {'S','u','n','S'};
