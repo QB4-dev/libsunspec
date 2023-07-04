@@ -40,6 +40,7 @@
 extern "C" {
 #endif
 
+int suns_log_set_log_level(int priority);
 void suns_log(int priority, const char *format, ...);
 
 #ifdef __cplusplus

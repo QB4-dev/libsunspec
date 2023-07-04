@@ -23,22 +23,36 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <errno.h>
 
 #include "sunspec_log.h"
 
 char *suns_log_priority[] = {"EMERG","ALERT","CRIT","ERR","WARNING","NOTICE","INFO","DEBUG"};
+static int g_sunspec_log_level = SUNS_LOG_DEBUG;
+
+int 
+suns_log_set_log_level(int priority)
+{
+    if ((priority >= SUNS_LOG_EMERG) || (priority <= SUNS_LOG_DEBUG)) {
+        g_sunspec_log_level = priority;
+        return 0;
+    }
+    return EINVAL;
+}
 
 void
 suns_log(int priority, const char *format, ...)
 {
     char *priority_str = "UNKNOWN";
-
     va_list args;
 
     va_start(args, format);
-    if ((priority >= SUNS_LOG_EMERG) || (priority <= SUNS_LOG_DEBUG)) {
+    if ((priority >= SUNS_LOG_EMERG) || (priority <= g_sunspec_log_level)) {
         priority_str = suns_log_priority[priority];
+    } else {
+        return;
     }
+    
     printf("%s ", priority_str);
     vprintf(format, args);
     printf("\n");
