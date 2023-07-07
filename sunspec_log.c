@@ -33,7 +33,7 @@ static int g_sunspec_log_level = SUNS_LOG_DEBUG;
 int 
 suns_log_set_log_level(int priority)
 {
-    if ((priority >= SUNS_LOG_EMERG) || (priority <= SUNS_LOG_DEBUG)) {
+    if ((priority >= SUNS_LOG_EMERG) && (priority <= SUNS_LOG_DEBUG)) {
         g_sunspec_log_level = priority;
         return 0;
     }
@@ -47,7 +47,7 @@ suns_log(int priority, const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    if ((priority >= SUNS_LOG_EMERG) || (priority <= g_sunspec_log_level)) {
+    if ((priority >= SUNS_LOG_EMERG) && (priority <= g_sunspec_log_level)) {
         priority_str = suns_log_priority[priority];
     } else {
         return;
